@@ -81,6 +81,7 @@ public class LoaderController {
                 
                 line = reader.readLine();
                 index++;
+                Thread.sleep(50);
             }
             
             transactionRegion.putAll(buffer);
@@ -121,7 +122,7 @@ public class LoaderController {
 	@ResponseBody
 	public int count() throws Exception {
 		QueryService queryService = clientCache.getQueryService();
-		Query query = queryService.newQuery("SELECT count(*) FROM /transactions");
+		Query query = queryService.newQuery("SELECT count(*) FROM /" + transactionRegion.getName());
 		Object result = query.execute();
 		Collection<?> collection = ((SelectResults<?>)result).asList();
 		
