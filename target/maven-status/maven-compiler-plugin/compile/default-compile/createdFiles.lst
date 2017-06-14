@@ -1,6 +1,0 @@
-io/spring/config/LoaderCloudConfig.class
-io/spring/config/WebSocketConfig.class
-io/spring/config/LoaderLocalConfig.class
-io/spring/controller/LoaderController.class
-io/spring/controller/HomeController.class
-io/spring/LoaderApplication.class

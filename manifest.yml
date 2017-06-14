@@ -1,9 +1,9 @@
 ---
 applications:
-- name: demo-loader
+- name: pcc-loader
   random-route: true
   mem: 2G
-  path: target/demo-loader-0.0.1-SNAPSHOT.jar
+  path: target/pcc-dataloader-0.0.1-SNAPSHOT.jar
   buildpack: java_buildpack_offline
   services:
   - test-pcc

@@ -33,11 +33,11 @@ public class LoaderLocalConfig {
 		return clientCache;
 	}
 	
-	@Bean(name = "demo")
+	@Bean(name = "transactions")
 	public Region<String, PdxInstance> transactionRegion(@Autowired ClientCache clientCache) {
 		ClientRegionFactory<String, PdxInstance> transactionRegionFactory = clientCache.createClientRegionFactory(ClientRegionShortcut.PROXY);
 
-		Region<String, PdxInstance> transactionRegion = transactionRegionFactory.create("demo");
+		Region<String, PdxInstance> transactionRegion = transactionRegionFactory.create("transactions");
 
 		return transactionRegion;
 	}
