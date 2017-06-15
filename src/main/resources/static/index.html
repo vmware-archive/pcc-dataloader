@@ -29,7 +29,7 @@
 			<div id="memory_num" class="stats_num">N/A</div>
 		</div>
 
-		<div id="switch">
+		<div id="switch" style="display: none;">
 			<input id="batch_num" type='text' />
 			<button id="start_button" class="btn btn-success" onclick="toggle()">Start</button>
 		</div>
@@ -48,16 +48,26 @@
 					$("#status").html("Invalid number... Please retry.").fadeOut(1000);
 				} else {
 					start();
-					$("#start_button").removeClass("btn btn-success").addClass("btn btn-danger");
-					$("#start_button").html("Stop");
-					$("#start_button").attr("id", "stop_button");
+					showStop();
 				}
 			} else {
 				stop();
-				$("#stop_button").removeClass("btn btn-danger").addClass("btn btn-success");
-				$("#stop_button").html("Start");
-				$("#stop_button").attr("id", "start_button");
+				showStart();
 			}
+		}
+		
+		function showStart() {
+			$("#batch_num").show();
+			$("#stop_button").removeClass("btn btn-danger").addClass("btn btn-success");
+			$("#stop_button").html("Start");
+			$("#stop_button").attr("id", "start_button");
+		}
+		
+		function showStop() {
+			$("#batch_num").hide();
+			$("#start_button").removeClass("btn btn-success").addClass("btn btn-danger");
+			$("#start_button").html("Stop");
+			$("#start_button").attr("id", "stop_button");
 		}
 		
 		function start() {
@@ -90,14 +100,37 @@
 			});
 		}
 		
+		function status() {
+			var xmlHttp = new XMLHttpRequest();
+ 			xmlHttp.open( "GET", "/status", false );
+ 			xmlHttp.send( null );
+ 			
+ 			return xmlHttp.response;
+		}
+		
 		var socket = new SockJS('/loader-websocket');
 		client = Stomp.over(socket);
 		
 		client.connect({}, function (frame) {
+			if (status() == "START") {
+				$("#batch_num").hide();
+				$("#start_button").removeClass("btn btn-success").addClass("btn btn-danger");
+				$("#start_button").html("Stop");
+				$("#start_button").attr("id", "stop_button");
+			}
+			$("#switch").show();
 			count();
 			client.subscribe('/topic/record_stats', function(msg) {
 				var record_num = JSON.parse(msg.body);
 	            $("#record_num").html(record_num);
+	        }.bind(this));
+			
+			client.subscribe('/topic/status', function(msg) {
+				if (msg.body == "START") {
+					showStop();
+				} else {
+					showStart();
+				}
 	        }.bind(this));
 		});
 		
